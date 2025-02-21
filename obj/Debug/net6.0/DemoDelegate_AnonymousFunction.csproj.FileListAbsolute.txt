@@ -1,0 +1,15 @@
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\bin\Debug\net6.0\DemoDelegate_AnonymousFunction.exe
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\bin\Debug\net6.0\DemoDelegate_AnonymousFunction.deps.json
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\bin\Debug\net6.0\DemoDelegate_AnonymousFunction.runtimeconfig.json
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\bin\Debug\net6.0\DemoDelegate_AnonymousFunction.dll
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\bin\Debug\net6.0\DemoDelegate_AnonymousFunction.pdb
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\obj\Debug\net6.0\DemoDelegate_AnonymousFunction.csproj.AssemblyReference.cache
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\obj\Debug\net6.0\DemoDelegate_AnonymousFunction.GeneratedMSBuildEditorConfig.editorconfig
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\obj\Debug\net6.0\DemoDelegate_AnonymousFunction.AssemblyInfoInputs.cache
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\obj\Debug\net6.0\DemoDelegate_AnonymousFunction.AssemblyInfo.cs
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\obj\Debug\net6.0\DemoDelegate_AnonymousFunction.csproj.CoreCompileInputs.cache
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\obj\Debug\net6.0\DemoDelegate_AnonymousFunction.dll
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\obj\Debug\net6.0\refint\DemoDelegate_AnonymousFunction.dll
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\obj\Debug\net6.0\DemoDelegate_AnonymousFunction.pdb
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\obj\Debug\net6.0\DemoDelegate_AnonymousFunction.genruntimeconfig.cache
+D:\CodeDemo\PRN211\SE1627\DemoDelegate_AnonymousFunction\obj\Debug\net6.0\ref\DemoDelegate_AnonymousFunction.dll
