@@ -1,0 +1,47 @@
+Dapper: nó hoạt động với idbconnect của ado.net. 
+
+IDbconnect nó là 1 giao diện(interface) của ado.net . nó nằm trong namesapce system.data. => nó đại diện cho 1 kết nối đến cơ sở dữ liệu
+Dapper voi EF:
+Dapper: 👉 kiểm soát linh hoạt được các câu truy vấn của mình
+EF: trao quyền cho ORM và sử dụng linq để viết câu truy vấn
+
+
+Dapper Query
+1. Querying Scalar value
+👉 để thực thi câu lệnh và trả về giá trị đơn lẻ( ví dụ như count*, MAX(), AVG(), select top1,...)
+
+2. Query Single Row
+=> Truy vấn 1 hàng duy nhất từ cơ sở dữ liệu ( nếu truy vấn mà trả về nhiều hơn 1 hàng hoặc không có hàng nó thì nó sẽ ném ra lỗi InvalidOperationExeption ==> Query Single). 
+   + Query Single<T>: 👉 dùng nó khi biết chắc chắn, luôn luôn query sẽ trả về 1 hàng)
+   + QuerySingleOrDefault<T>: 👉 dùng nó khi mà truy vấn có thể không có dữ liệu, nhưng nó không thể có nhiều hơn 1 dòng
+   + QueryFisrt<T>: 👉 nếu có thể có nhiều dòng nhưng chỉ lấy dòng đầu tiên, truy vấn không có dữ liệu sẽ trả về lỗi.
+   + QueryFirstOrDefault<T> : 👉 nó có thể không có dữ liệu hoặc có nhiều dữ liệu nhưng chỉ cần dòng đầu tiên. 
+
+3. Query Multipe Row
+=> Khi muốn truy vấn lấy nhiều hàng dữ liệu
+   + Query<T>: Khi cần lấy nhiều hang
+4. Query Multipe Result
+=> truy vấn nhiều tập dữ liệu trong 1 lần gọi sql
+5. Dapper Query Unbuffered ( truy vấn không đệm) => giúp tiết kiệm ram khi làm việc với dữ liệu lớn
+
+=> khi nào nên dùng? + khi dữ liệu lớn
+                     + Khi muốn xử lý dữ liệu theo từng dòng, không cần lưu hết vào bộ nhớ
+                     + Khi dùng kết nối database từ xa để giảm tải bộ nhớ mạng
+
+
+Executing Non-Query Commands: => INSERT, UPDATE, DELETE, EXECUTE STORED PROCEDURE (Gọi Stored Procedure không trả về dữ liệu)
+
+Executing Reader : 👉 nó làm việc trực tiếp với IDataReader
+
+Using Inheritance:( dapper nó không hỗ trợ kế thừa trực tiếp) ,  có từ khóa TypeHandler ( nó giúp hỗ trợ kế thừa tự động) 
+
+Bulk operation with dapper: ( thao tác hàng loạt với dapper). nó không hỗ trợ trực tiếp thao tác hàng loạt( Bulk Insert, Bulk Update, Bulk Delete )
+
+Sử dụng Execute() với nhiều bản ghi cùng lúc.
+Sử dụng SqlBulkCopy (chỉ dành cho SQL Server).
+Sử dụng TVP (Table-Valued Parameters) trong Stored Procedure.
+Sử dụng MERGE để tối ưu hóa Bulk Upsert.
+
+Dapper chỉ có Execute() để chạy nhiều câu lệnh SQL, không có API sẵn cho thao tác Bulk.
+👉 Bạn phải tự tối ưu Bulk Operations bằng SqlBulkCopy, MERGE, TVP.
+
