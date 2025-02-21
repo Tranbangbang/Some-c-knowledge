@@ -1,0 +1,340 @@
+C# Tutorial
+
+1. Kiểu dữ liệu
+
+Kiểu dữ liệu value, tham chiếu
+Value Type:         + int, long, double,char, structs,enum,...
+                    + giá trị của nó không được null( trừ khi sử dụng kiểu nullable- int?,...)
+                    + KHi gán 1 biến kiểu giá trị cho biến khác thì 1 bản sao hoàn toàn mới 
+                      được tạo
+                    + Thay đổi giá trị của biến này sẽ không ảnh hưởng đến biến khác
+                    + được lưu trên stack
+Reference Type: 
+                    + được lưu trữ trên heap, còn biến chỉ lưu địa chỉ của dữ liệu trên stack
+                    + Khi gán 1 biến kiểu tham chiếu cho biến khác thì nó chỉ có địa chỉ tham chiếu được sao chép thôi
+                    + Nếu thay đổi nội dung của biến thì các biến tham chiếu đến cùng dữ liệu cũng bị thay đổi
+                    + Có thể nhận giá trị null
+                    + class,string,object,array,delegate,interface,...
+                    + Nó lưu địa chỉ bộ nhớ, nếu nó null thì khi truy cập vào nó sẽ gây ra lỗi NullReferenceException
+
+Boxing, UnBoxing là quá trình chuyển đổi kiểu dữ liệu qua lại
+boxing: chuyển từ value type qua kiểu tham chiếu
+Unboxing: ngược lại, chuyển từ kiểu tham chiếu về value type( cần phải được ép kiểu chính xác, nếu không sẽ gây ra lỗi INVALIDCASTEXCEPTION.
+
+
+ ==>  Có thể kiểm tra địa chỉ của tham chiếu bằng cách sử dụng Object.ReferenceEquals hoặc có thể dùng unsafe để thao tác với con trỏ trong c#
+
+Trong c#, bình thường sẽ không thể truy cập trực tiếp vào bộ nhớ như trong c/c++. nhưng với chế độ UNSAFE , thì có thể sử dụng con trỏ để làm việc với bộ nhớ trực tiếp.
+
+Vậy UNSAFE là gì? 
+      - nó cho phép sử dụng con trỏ
+      - Chỉ hoạt động nếu bật chế độ “ALLOW UNSAFE CODE” trong priect setting hoặc dùng  
+        -unsafe khi biên dịch
+      - cần đánh dấu bằng từ khóa unsafe trong phương thức, lớp hoặc khối code
+      - Không được quản lý bởi Garbage collector(GC) ⇒ có thể dây lỗi nếu sử dụng sai
+
+VẬY KHI NÀO NÊN DÙNG unsafe?
+Khi làm việc với phần cứng( driver, xử lý bộ nhớ thấp, I/O)
+KHi tối ưu hiệu suất, đặc biệt là khi xử lý mảng lớn
+Khi gọi API c++ thông qua p/Invoke
+TRÁNH sử dụng nếu không cần thiết, vì nó có thể gây lỗi bộ nhớ và làm mất kiểm soát bộ nhớ 
+
+        ⇒ có thể dùng ref và out để truyền tham chiếu cho kiểu giá trị
+           ref: dùng khi cần thay đổi giá trị của 1 biến mà đã có giá trị ban đầu
+           out: dùng khi cần trả về nhiều giá trị từ 1 phương thức
+
+string là kiểu tham chiếu đúng không? ⇒ ĐÚNG ⇒ tại sao?
+vì nó lưu trữ trên heap và biến string chỉ chứa địa chỉ bộ nhớ
+ví dụ : string str1 = “hello”;
+            string str2 = str1; ⇒ khi này str2 nó sẽ trỏ đến cùng địa chỉ với str1
+In ra str1, str2 thì đều ra hello;
+Bây giờ, 
+str2=”bang” ⇒ khi này mình sẽ tạp 1 object string mới trên heap
+in ra thì str1 là hello, còn str2 la bang( nó sẽ trở đến vùng nhớ mới)
+
+
+⇒ string là 1 đối tượng không thể thay đổi được( nó là immutable- không thể thay đổi nội dung)
+
+VÌ là mỗi lần thay đổi string thì 1 object mới sẽ được tạo trên heap thay vì sửa đổi object cũ. cho nên nó là 1 đối tượng không thể thay đổi được. ⇒ sẽ giúp string an toàn và tối ưu bộ nhớ khi xử lý chuỗi
+
+CÒN KHÔNG?, nếu b cần chuỗi có thể thay đổi mà không cần tạo object mới thì sử dụng StringBuilder
+
+
+
++ Bool với System.Boolean thì nó thực chất là cùng 1 kiểu dữ liệu
+   System.Boolean là kiểu dữ liệu thực sự được định nghĩa trong .Net framework
+ ⇒ bản chất nó là giống nhau( gì thì gì, khi biên dịch nó vẫn là system.boolean)
+
++ Khi nối chuỗi, tại sao nên dùng ${} thay vì dùng toString?
+   ⇒  dễ đọc hơn, 
+        hiệu suất tốt hơn ( vì khi sử dụng .toString thì nó sẽ tạo 1 chuỗi mới trên heap),
+        Xử lý null an toàn hơn ( nếu 1 giá trị là null, dùng .ToString() thì sẽ gây ra lỗi     NullReferenExeption. Nếu sử dụng @{} thì nó sẽ tránh được lỗi khi gặp giá trị null,
+        Dễ định dạng
+
+
++  HashValue(): Thường ám chỉ giá trị băm, là số nguyên được tạo bởi thuật toán băm. Nó dùng để so sánh nhanh, tra cứu nhanh trong hashTable, dictionary, set. 
+2 object có cùng dữ liệu có thể có hash khác nhau. 
+
++ 1 biến mà có giá trị null ⇒ thì có nghĩa nó không tham chiếu đến bất kỳ đối tượng nào trong bộ nhớ. 
+
++ switch-case: nếu như không có break thì chương trình sẽ tiếp tục chạy các case tiếp theo ngay cả khi điều kiện không khớp. 
+
++ break khác gì với return: break để thoát khỏi swith hoặc vòng lặp, return là khi cần thoát hẳn khỏi hàm. break thì có thể chạy tiếp code, còn return thì khong
+
+
++ Mảng ( sử dụng để như có thể sắp xếp,đảo ngược,tìm kiếm,...)
+   
++ Tham số với đối số của hàm
+    tham số là biens được khai bảo trong danh sách tham số của hàm
+    Đối sô là giá trị được truyền vào khi gọi àm
+   Hiểu đơn giản thì : tham số là biến dùng để nhận giá trị khi gọi hàm, còn đối số là giá trị cụ thể truyền vào tham số của hàm khi gọi nó.. 
+
++ Queue với stack : cấu trúc dữ liệu
+  queue: hằng đợi, vào trước ra trước ⇒ hệ thống in ấn, hay hệ thống xử lý các request
+  stack: ngăn xếp, vào sau ra trước ⇒ 
+
++ Biểu thức lambda( hàm ẩn danh) 
+ ví dụ như có 1 list<t>, muốn lọc dữ liệu các số chẵn. n=>n%2==0
+ 
+   Dùng trong biểu thức Func, Action
+   Các delegate như Func và Action để dùng làm với lambda
+Func<T>: ( trả về giá trị)
+Action<T>: không trả về giá trị, dùng khi không cần return
+
+  Hàm vô danh?: là 1 hàm không có tên được khai báo trực tiếp trong 1 delegate, biểu thức lambda(=>) là 1 cách hiện đại hơn để viết hàm vô danh 
+
+Khai báo từ khóa delegate và không cần tên hàm. 
+
+Lambda(=>) là phiên bản ngắn gọn hơn của hàm vô danh
+
+
++ LINQ
+
++ Các từ khóa làm việc với lớp
+
++ ADO.NET
+
+Có 2 mô hình chính
+Connected Model( kết nối trực tiếp)
+DÙng sqlCommand, sqlDataReader để làm việc với database
+SQLCommand: thực thi câu lệnh SQL
+SQLDataReader: đọc từng dòng dữ liệu
+reader.Read(): lăp qua từng dòng kết quả
+
+Disconnected Model( mô hình không kết nối)
+Dùng sqlDataAdapter, Dataset, DataTable
+SQlAdapter: lấy dữ liệu mà không cần sqlDataReader
+Fill(table) : lưu dữ liệu vào datatable
+datatable: giúp thao tác dữ liệu mà không cần kết nối db
+Dữ liệu được lấy về lưu trong RAM(bộ nhớ đệm), kh cần kết nối liên tục 
+
+
+
+Modle Binding: giúp lấy dữ liệu từ request dễ dàng.tự động ánh xạ dữ liệu từ http request vào các tham số của controller hoặc model. 
+
+
+ASP.NET Core : 
+	Action: là phương thức xử lý request trong controller( trả về json, view,..)- IActionResult
+           Middleware: Xử lý request, chạy trước khi controller xử lý request, có thể dùng để logging, CORS, Authen,...
+           Filter: xử lý trước và sau Controller, có thể dùng để validate dữ liệu, kiểm tra quyền, logging. 
+
+            DI( dependency injection): giảm thiểu sự phụ thuộc giữa các class, nó hỗ trọ scoped, transient, singlton,...để quản lý vòng đời. 
+
+
+
+Dùng Transient cho service nhỏ, không có trạng thái.
+Dùng Scoped cho Database Context, Repository Pattern.
+Dùng Singleton cho Logging, Caching, Configurations.
+
+
+
+Session với cookie nó đều để lưu trữ thông tin người dùng. Nhưng nó khác nhau về cách hoạt động, cách lưu trữ và bảo mật. 
+            -  Session: lưu trữ trên máy chủ, hết hạn khi đóng trình duyệt hoặc sau thời gian không hoạt động. An toàn hơn, không thể đọc từ phía máy khách
+            - Cookie: Lưu trữ trên trình duyệt của người dùng, Lưu trữ lâu dài, có thể cấu hình thời gian hết hạn, Có thể bị tấn công XSS hoặc lộ thông tin nếu không bảo mật.
+
+
+Unit of work: Thường cứ nghĩ là nó sẽ handle 1 transaction( các hành động như insert,update, delete,.. được thực thi trong 1 transaction thống nhất)---nhưng thực chất dùng unit of nitwork để có những handle được trước khi mình submit xuống dưới database, và nó phục vụ dễ dàng cho unit test.
+Async/Await:( tránh được nút thắt cổ chai, nâng cao khả năng tương tác với người dùng)  tăng hiệu suất 1 cách gián tiếp => Task => Threadbool => Thread=>Synchnorous Programing ( lập trình đồng bộ và bất đồng bộ) => vertical scale / Horizaoltal scale. 
+		-  Horizontal scale:  ví dụ 1 server chỉ xử lý được 200 request, khi quá 200 thì nó có thể sẽ kém hiệu suất, hoặc có thể bị chết. khi đấy mình thêm 1 server nữa, dùng load balancing để nó có thể ném ra vào 1 trong 2 server trên. ( hoặc thêm ram,cpu cho máy tính thì khi đó gọi là vertical scaling).   
+
+
+
+Biết gì về entity framework? tại sao entity framework ra đời?
+ => để làm gì, nó giúp gì?
+⇒ như đã biết thì trước khi có EF thì chúng ta làm việc với ADO, nó sẽ làm việc trực tiếp với database, phải viết và duy trì nhiều câu lệnh SQL. Nó thiếu tính linh hoạt( khi thay đổi cấu trúc database thì phải sửa đổi nhiều đoạn query sql). Nó cũng khó khăn trong việc ánh xạ dữ liệu( mỗi truy vấn đều phải viết + phải ánh xạ dữ liệu bằng tay( mỗi cột phải đọc từ SQL dataReader)  
+
+Vì thế cho nên EF ra đời để nhằm mục đích giải quyết những vấn đề trên. 
+
+⇒ tóm tắt lại. EF là một ORM để giao tiếp dễ dàng hơn với database. Nó tự động ánh xạ dữ liệu, dễ bảo trì và bảo mật hơn. 
+
+
+Lazy Loading vs. Eager Loading: đều là cách mà EF dùng để tải dữ liệu liên quan từ database. 
+Lazy Loading: dữ liệu liên quan chỉ được tải lên khi cần thiết. 
+Cách sử dụng lazyLoading: phải khai báo thuộc tính điều hướng virtual. 
+Nhưng nó có thể gây nhiều truy vấn đến database
+⇒ dùng nó khi không cần dữ liệu liên quan ngay lập tức, muốn truy vấn nhẹ và chỉ tải lên khi cần
+Eager Loading: tải toàn bộ dữ liệu liên quan ngay từ đầu bằng cách sử dụng include()
+Cách sử dụng: sử dụng .Include() để tải dữ liệu liên quan 
+⇒dùng nó khi cần dữ liệu liên quan ngay từ đầu,..
+      
+
+Ví dụ: khi dung lazy loading
+Giả sử có 100 khách hàng, mỗi khách hàng có danh sách order. bây giờ lấy hết ra. 
+
+
+Lazy: 
+
+
+using (var context = new MyDbContext())
+{
+    var customers = context.Customers.ToList(); // 1 truy vấn SQL
+
+    foreach (var customer in customers)
+    {
+        var orders = customer.Orders; // Mỗi khách hàng lại thực hiện 1 truy vấn SQL
+    }
+}
+
+
+
+
+Eager Loading: 
+
+
+using (var context = new MyDbContext())
+{
+    var customers = context.Customers.Include(c => c.Orders).ToList(); // 1 truy vấn SQL duy nhất
+}
+
+
+
+Hàm static với hàm bình thường: 
+
+⇒ nó có sự khác biệt về cách hoạt động, phạm vi truy vập và cách sử dụng.
+ví dụ 1 hàm la static thì nó có thể gọi trực tiếp từ class mà không cần tạo instane của lớp đấy nữa. 
+
+thì khi đấy dùng static khi:
+hàm không cần lưu trạng thái của đối tượng
+hàm chỉ thực hiện thao tác chung
+muốn tối ưu bộ nhớ, tránh tạo nhiều instane
+Dùng hàm bình thường khi:
+Hàm truy cập dữ liệu của đối tượng
+hàm có liên quan đến instance cụ thể
+Cần ghi đè(override) trong kế thừ
+⇒ nói dung thì dùng static cho các hàm tiện ích, toán học, xử lý chuỗi hay là cấu hình chung. Còn dùng hàm bình thường khi cần thao tác với dữ liệu của đối tượng
+
+
+design pattern( repository, unit of work)
+
+Repository pattern: tách biệt logic truy vấn db, dễ kiểm thử, bảo trì
+
+Unit of work: nó quản lý, handle transaction, đảm bảo tính bảo toàn dữ liệu( có thể rollback nếu có lỗi )
+
+Unitofwork k phải là cái để gom Repository lại 1 chỗ. Đơn vị công việc sinh ra là để quản lý công việc với cơ sở dữ liệu bằng giao dịch. Ở các ngôn ngữ khác thì UOW quan trọng nhưng ở .Net thì EF nó làm việc hộ open, commit, rollback hộ rồi, write sao cho đúng là đc.
+Phần thưởng: ở các ngôn ngữ khác như java, php job commit thực hiện thủ công bằng tay, vì thế unitofwork ở đó đóng vai trò như là nơi tạo, lưu trữ các kho lưu trữ để thống nhất tất cả kho lưu trữ đều dùng chung 1 connectId và chung 1 giao dịch. Ở .Net chúng ta có DI phạm vi => dù các repo k nằm chung 1 uow thì dbContext cx chỉ được khởi tạo 1 lần và tiêm vào toàn bộ repo, đảm bảo tất cả các repo đều chung 1 giao dịch. Còn nếu bạn dùng nhiều db thì phải xây dựng theo cách khác, ko nhất thiết bị phải repo + unitofwork, chỉ unitofwork thôi cx đc mà :))
+
+
+Một số câu hỏi phụ:
+
+
+
+
+
+
+Phân biệt sự khác nhau khi sử dụng Not in và not exists?
+
+⇒ nó đều được sử dụng để lọc các bản ghi không tồn tại, nhưng chúng có sự khác biệt quan trọng về cách hoạt dộng, hiệu suất và cách xử lý giá trị null.
+
+Dùng NOT EXISTS:  (kiểm tra sự tồn tại của bản ghi)
+Dữ liệu có thể chứa null
+tập dữ liệu lớn, cần tối ưu hiệu suất
+Dùng NOT IN:  ( nó so sánh từng giá trị với tập dữ liệu con)
+Chắc chắn không có null trong subquery
+tập dữ liệu nhỏ, dễ đọc và hiểu hơn
+
+⇒ nếu không chắc chắn về dữ liệu thì nên dùng NOT EXISTS để đảm bảo kết quả chính xác và hiệu suất của nó tốt hơn
+
+
+Phân biệt giữa delete với truncate trong sql?
+⇒ cả 2 đều được sử dụng để xóa dữ liệu trong sql, nhưng chúng có sự kahcs biệt quan trọng về cách hoạt động, hiệu suất và khả năng phục hồi dữ liệu
+
+DELETE:
+dùng để xóa 1 số hoặc toàn bộ hàng trong bảng dựa trên điều kiện
+có thẻ rollback nếu dùng trong transaciton
+kích hoạt trigger nếu bảng có trigger
+TRUNCATE:
+dùng để xóa toàn bộ dữ liệu trong bảng mà không cần điều kiện
+không thể rollback vì không ghi log transaction như delete
+tự động reset identity(Auto_increment) về giá trị ban đầu
+⇒ tóm lại thì DELETE nó linh động hơn nhưng chậm hơn, TRUNCATE nhanh hơn nhưng không thể rollback và không xóa có điều kiện. 
+
+
+1 cột khai báo kiểu char và varchar thì có thể nhận giá trị rỗng không? tại sao?
+⇒  cả 2 đều có thể nhận giá trị rỗng(‘’. empty string), nhưng có sự kahcs biệt về cách lưu trữ và xử lý
+
+Char(n): là kiểu dữ liệu cố định độ dài ( khi lưu xuống db thì nó có thể thêm khoảng trắng)
+=> nếu cần độ dài cố định thì dùng char( ví dụ như sdt, mã số)
+
+Varchar(n): là kiểu dữ liệu biến đổi độ dài
+=> nếu cần tiết kiệm bộ nhớ và lưu trữ linh hoạt thì dùng varchar
+
+⇒ còn varchar và nvarchar thì đều là kiểu dữ liệu chuỗi biến đổi độ dài. Nhưng nó có sự khác biệt về khả năng lưu trữ ký tự Unicode, dung lượng bộ nhớ và hiệu suất. 
+
+
+Dùng NVARCHAR nếu cần lưu Unicode( ký tự có dấu, đa ngôn ngữ)
+Dùng VARCHAR nếu chỉ cần lưu dữ liệu ASCII để tối ưu hiệu suất
+
+Phân biệt giữa null và rỗng
+⇒ nó đều để biểu diễn trạng thái không có giá trị
+
+null là không có giá trị, còn rỗng thì giá trị rỗng và độ dài 0.
+
+So sánh Union, union all, intersect , except
+=> các toán tử ddeuf được sử dụng để kết hợp hoặc so sánh dữ liệu từ nhiều tập kết quả. tuy nhiên thì chúng có sự khác biệt về cách xử lý dữ liệu trùng lặp và kêt quả trả về
+
+Dùng UNION: khi muốn kết hợp dữ liệu nhưng chỉ giữ lại các giá trị duy nhất
+⇒ ví dụ: kết hợp danh sách khách hàng từ 2 bảng mà không muốn bị trùng
+Dùng UNION ALL: khi muốn giữ lại tất cả dữ liệu, bao gồm các bản ghi trùng lặp
+⇒ ví dụ: hợp nhất tất cả dữ liệu từ 2 bảng mà không quan tâm đến việc có bị trùng hay không
+
+Dùng INTERSECT: muốn tìm dữ liệu xuất hiện trong cả 2 bảng
+⇒ ví dụ: lấy danh sách khách hàng đã mua hàng từ shop a và shop b
+
+Dùng EXCEPT: muốn tìm dữ liệu có trong bảng đầu tiên nhưng không có trong bảng thứ 2
+⇒ ví dụ: tìm khách hàng có trong A nhưng không có trong B
+
+Break với continue
+⇒ đều được sử dụng trong vòng lặp , nhưng khác biệt về cách hoạt động
+
+Break: dùng để thoát khỏi vòng lặp hoàn toàn, khi gặp break thì vòng lặp sẽ kết thúc ngay lập tức, và chương trình sẽ tiếp tục thực hiện dòng lệnh sau vòng lặp, break có thể dùng trong switch-case để kết thúc 1 case. 
+Continue: bỏ qua phần còn lại của vòng lặp hiện tại và tiếp tục vòng lặp tiếp theo, nó sẽ không kết thúc vòng lặp, chỉ bỏ qua phần code còn lại trong lần lặp đó. 
+
+
+
+
+Outbox Pattern?
+
+Nó là một design pattern ⇒ giúp đồng bộ database và message broker(Kafka,...) một cách đảm bảo tính nhất quán (consistency) bằng cách lưu sự kiện vào database trước khi gửi đến message broker
+
+Mục tiêu: 
+Đảm bảo Atomicity ( tính nguyên tử) trong giao dịch ( Transaction)
+Tránh lỗi mất đồng bộ giữa database và message broker
+Hỗ trợ Event-Driven Architecture ( kiến trúc hướng sự kiện)
+Tại sao cần Outbox Pattern
+Vấn đề: Dual write problem
+Khi hệ thống cần lưu dữ liệu vào database và gửi sự kiện đến message broker , có thể xảy ra lỗi nếu một trong hai thao tác thất bại
+
+using (var transaction = dbContext.Database.BeginTransaction())
+{
+    dbContext.Orders.Add(order);
+    dbContext.SaveChanges();  // ✅ Lưu thành công
+    
+    messageBus.Publish(new OrderCreatedEvent(order.Id));  // ❌ Gửi sự kiện thất bại!
+    
+    transaction.Commit(); // ❌ Lưu vào DB nhưng không gửi sự kiện → DỮ LIỆU KHÔNG    ĐỒNG BỘ!
+}
+
+⇒ thì khi đấy db có đơn hàng mới nhưng message broker không có sự kiện OrderCreatedEvent ⇒ khi này giải pháp cần dùng Outbox Pattern để đảm bảo tính nhất quán
+
+Cách hoạt động:
+⇒ thay vì gửi sự kiện ngay lập tức , thì ta sẽ lưu sự kiện vào bảng “outbox” trong database, rồi có một Background Jod (worker) đọc và gửi sự kiện sau.
